@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/master.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <title>Neighborhood Map</title>
+  </head>
+  <body>
+    <div class="app-wrapper">
+      <div class="top-bar">
+        <span>Search</span>
+        <div class="searchDiv">
+          <input id="searchBox" type="text" name="name" value="">
+        </div>
+      </div>
+      <div class="container">
+        <div class="left-side">
+          <ul>
+            <li>Key Locations</li>
+            <li>Little Manuels</li>
+            <li>Hazels Drive-in</li>
+            <li>Tao San Jin</li>
+            <li>Johnny Garlics</li>
+            <li>In-N-Out Burger</li>
+            <li>Bluefin Sushi</li>
+            <li>E.J.Phair</li>
+            <li>New Mecca Cafe</li>
+          </ul>
+        </div>
+        <div class="right-side" id="map">
+
+        </div>
+      </div>
+    </div>
+
+
+
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1AFo9-bYN64Psh9K3JO0yp5uFmVHOCCI&callback=initMap" async defer></script>
+  <script src="js/app.js"></script>
+  </body>
+</html>
