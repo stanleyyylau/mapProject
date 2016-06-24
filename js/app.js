@@ -1,3 +1,5 @@
+// The this all my favarite moving locations app will load these location by default
+
 var locations = [{
     name: "Little Manuels",
     lon: 38.00684,
@@ -43,6 +45,11 @@ var locations = [{
 
 var map;
 
+
+
+
+// The function for initilization the google map
+
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {
@@ -85,6 +92,7 @@ function initMap() {
 
 
 
+// A fucntion to handle marker boucing when clicked
 function toggleBounce(marker) {
     if (marker.getAnimation() !== null) {
         marker.setAnimation(null);
@@ -104,7 +112,7 @@ function toggleBounce(marker) {
 //this is the KO part for MVVM pattern
 
 function AppViewModel() {
-    self = this;
+    var self = this;
     self.allLocations = ko.observableArray(locations);
 }
 
