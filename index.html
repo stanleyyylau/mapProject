@@ -18,16 +18,16 @@
       </div>
       <div class="container">
         <div class="left-side">
-          <ul>
-            <li>Key Locations</li>
-            <li>Little Manuels</li>
+          <ul data-bind="foreach: allLocations">
+            <li data-bind="text: name">Key Locations</li>
+            <!-- <li>Little Manuels</li>
             <li>Hazels Drive-in</li>
             <li>Tao San Jin</li>
             <li>Johnny Garlics</li>
             <li>In-N-Out Burger</li>
             <li>Bluefin Sushi</li>
             <li>E.J.Phair</li>
-            <li>New Mecca Cafe</li>
+            <li>New Mecca Cafe</li> -->
           </ul>
         </div>
         <div class="right-side" id="map">

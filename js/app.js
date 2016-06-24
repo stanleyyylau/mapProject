@@ -97,9 +97,15 @@ function toggleBounce(marker) {
 }
 
 
+
+
+
+
+//this is the KO part for MVVM pattern
+
 function AppViewModel() {
-    this.firstName = "Bert";
-    this.lastName = "Bertington";
+    self = this;
+    self.allLocations = ko.observableArray(locations);
 }
 
 // Activates knockout.js
