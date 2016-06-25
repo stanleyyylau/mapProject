@@ -111,13 +111,12 @@ function toggleBounce(marker) {
 
 //this is the KO part for MVVM pattern
 
-function AppViewModel() {
-    var self = this;
-    self.allLocations = ko.observableArray(locations);
+var AppViewModel = {
+    allLocations : ko.observableArray(locations),
 
     //when locations in the list view is clicked
 
-    self.locationClicked = function(location){
+    locationClicked : function(location){
       console.log(location);
       // when clicked, set the center of the map to current clicked location
       map.setCenter(new google.maps.LatLng(location.lon, location.lat));
@@ -133,23 +132,34 @@ function AppViewModel() {
       toggleBounce(marker[index]);
       infowindow[index].open(map, marker[index]);
 
-    };
+    },
 
     //now let's handel the search filter function
-    self.query = ko.observable('');
-    self.search = function(value) {
+    query : ko.observable(''),
+    search : function(value) {
       // remove all the current locations, which removes them from the view
       AppViewModel.allLocations.removeAll();
-
-      for(var x in locations) {
-        if(locations[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-          AppViewModel.allLocations.push(locations[x]);
+      console.log(value);
+      // for(var x in locations) {
+      //   if(locations[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+      //     AppViewModel.allLocations.push(locations[x]);
+      //   }
+      // }
+      console.log(locations);
+      AppViewModel.allLocations.push(locations[3]);
+      for(var i=0; i>locations.length; i++){
+        if(locations[i].name.toLowerCase().indexOf(value.toLowerCase()) >= 0){
+          AppViewModel.allLocations.push(locations[i]);
         }
       }
-    };
+
+    }
 
 }
 
+
+
+
 // Activates knockout.js
-ko.applyBindings(new AppViewModel());
+ko.applyBindings(AppViewModel);
 AppViewModel.query.subscribe(AppViewModel.search);
