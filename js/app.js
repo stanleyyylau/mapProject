@@ -35,11 +35,6 @@ var locations = [{
     lon: 38.0330084,
     lat: -121.8846951,
     content: "<div class='info'>E.J.Phair</div>"
-}, {
-    name: "Bluefin Sushi",
-    lon: 38.033322,
-    lat: -121.8857923,
-    content: "<div class='info'>Bluefin Sushi</div>"
 }];
 
 
@@ -60,8 +55,7 @@ function initMap() {
         zoom: 8
     });
 
-
-    for (var i = 0; i < locations.length; i++) {
+    for (var i = 0; i < AppViewModel.allLocations().length; i++) {
         marker[i] = new google.maps.Marker({
             map: map,
             animation: google.maps.Animation.DROP,
@@ -72,7 +66,7 @@ function initMap() {
         });
         //let me creat all the info window
           infowindow[i] = new google.maps.InfoWindow({
-          content:locations[i].content
+          content:AppViewModel.allLocations()[i].content
         });
 
         marker[i].addListener('click', (function(infoCopy,markerCopy) {
@@ -87,6 +81,7 @@ function initMap() {
         });
 
     }
+
 
 }
 
@@ -139,13 +134,19 @@ var AppViewModel = {
     search : function(value) {
       // remove all the current locations, which removes them from the view
       AppViewModel.allLocations([]);
+      // remove all marker now, than add them back
+      for(var ii=0; ii<marker.length; ii++){
+        marker[ii].setMap(null);
+      }
+
       console.log(value);
       for(var x in locations) {
         if(locations[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
           AppViewModel.allLocations.push(locations[x]);
+          marker[x].setMap(map);
         }
       }
-
+      // updateMap();
     }
 
 }
@@ -156,3 +157,40 @@ var AppViewModel = {
 // Activates knockout.js
 ko.applyBindings(AppViewModel);
 AppViewModel.query.subscribe(AppViewModel.search);
+
+
+// function updateMap(){
+//   //let's clear all markers first
+//   console.log(marker);
+//   for(var ii=0; i<marker.length;i++){
+//     marker[ii].setMap(null);
+//   }
+//   console.log(ii);
+//
+//   for (var i = 0; i < AppViewModel.allLocations().length; i++) {
+//       marker[i] = new google.maps.Marker({
+//           map: map,
+//           animation: google.maps.Animation.DROP,
+//           position: {
+//               lat: locations[i].lon,
+//               lng: locations[i].lat
+//           }
+//       });
+//       //let me creat all the info window
+//         infowindow[i] = new google.maps.InfoWindow({
+//         content:AppViewModel.allLocations()[i].content
+//       });
+//
+//       marker[i].addListener('click', (function(infoCopy,markerCopy) {
+//         return function(){
+//             infoCopy.open(map, markerCopy);
+//         }
+//
+//       })(infowindow[i],marker[i]));
+//
+//       google.maps.event.addListener(marker[i], 'click', function() {
+//           toggleBounce(this);
+//       });
+//
+//   }
+// }
