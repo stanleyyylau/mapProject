@@ -114,7 +114,8 @@ var AppViewModel = {
     locationClicked : function(location){
       console.log(location);
       // when clicked, set the center of the map to current clicked location
-      map.setCenter(new google.maps.LatLng(location.lon, location.lat));
+      // actually we don't need to set map center to move the map, google map is smart enough to handle that moving part
+      // map.setCenter(new google.maps.LatLng(location.lon, location.lat));
 
       // indentify which index of location is being clicked
 
