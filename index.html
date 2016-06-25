@@ -7,26 +7,19 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <title>Neighborhood Map</title>
   </head>
+
   <body>
     <div class="app-wrapper">
       <div class="top-bar">
         <span>Search</span>
         <div class="searchDiv">
-          <input id="searchBox" type="text" name="name" value="">
+          <input id="searchBox" placeholder="Search…" type="search" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
         </div>
       </div>
       <div class="container">
         <div class="left-side">
           <ul data-bind="foreach: allLocations">
-            <li data-bind="text: name">Key Locations</li>
-            <!-- <li>Little Manuels</li>
-            <li>Hazels Drive-in</li>
-            <li>Tao San Jin</li>
-            <li>Johnny Garlics</li>
-            <li>In-N-Out Burger</li>
-            <li>Bluefin Sushi</li>
-            <li>E.J.Phair</li>
-            <li>New Mecca Cafe</li> -->
+            <li data-bind="text: name, click: $parent.locationClicked">Key Locations loading...</li>
           </ul>
         </div>
         <div class="right-side" id="map">

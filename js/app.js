@@ -4,49 +4,50 @@ var locations = [{
     name: "Little Manuels",
     lon: 38.00684,
     lat: -121.805525,
-    content: "<div class='info'>testtesttesttesttesttesttesttesttesttesttesttesttesttest</div>"
+    content: "<div class='info'>Little Manuels</div>"
 }, {
     name: "Hazels Drive-in",
     lon: 38.0127268,
     lat: -121.83241,
-    content: "<div class='info'>testtesttesttesttesttesttesttesttesttesttesttesttesttest</div>"
+    content: "<div class='info'>Hazels Drive-in</div>"
 }, {
     name: "Tao San Jin",
     lon: 37.9628493,
     lat: -121.7366144,
-    content: "<div class='info'>testtesttesttesttesttesttesttesttesttesttesttesttesttest</div>"
+    content: "<div class='info'>Tao San Jin</div>"
 }, {
     name: "Johnny Garlics",
     lon: 37.94536,
     lat: -121.742153,
-    content: "<div class='info'>testtesttesttesttesttesttesttesttesttesttesttesttesttest</div>"
+    content: "<div class='info'>Johnny Garlics</div>"
 }, {
     name: "In-N-Out Burger",
     lon: 37.955532,
     lat: -121.6194595,
-    content: "<div class='info'>testtesttesttesttesttesttesttesttesttesttesttesttesttest</div>"
+    content: "<div class='info'>In-N-Out Burger</div>"
 }, {
     name: "Bluefin Sushi",
     lon: 37.6058122,
     lat: -122.1113959,
-    content: "<div class='info'>testtesttesttesttesttesttesttesttesttesttesttesttesttest</div>"
+    content: "<div class='info'>Bluefin Sushi</div>"
 }, {
     name: "E.J.Phair",
     lon: 38.0330084,
     lat: -121.8846951,
-    content: "<div class='info'>testtesttesttesttesttesttesttesttesttesttesttesttesttest</div>"
+    content: "<div class='info'>E.J.Phair</div>"
 }, {
     name: "Bluefin Sushi",
     lon: 38.033322,
     lat: -121.8857923,
-    content: "<div class='info'>testtesttesttesttesttesttesttesttesttesttesttesttesttest</div>"
+    content: "<div class='info'>Bluefin Sushi</div>"
 }];
 
 
 var map;
 
 
-
+var marker = [];
+var infowindow = [];
 
 // The function for initilization the google map
 
@@ -59,8 +60,7 @@ function initMap() {
         zoom: 8
     });
 
-    var marker = [];
-    var infowindow = [];
+
     for (var i = 0; i < locations.length; i++) {
         marker[i] = new google.maps.Marker({
             map: map,
@@ -114,7 +114,42 @@ function toggleBounce(marker) {
 function AppViewModel() {
     var self = this;
     self.allLocations = ko.observableArray(locations);
+
+    //when locations in the list view is clicked
+
+    self.locationClicked = function(location){
+      console.log(location);
+      // when clicked, set the center of the map to current clicked location
+      map.setCenter(new google.maps.LatLng(location.lon, location.lat));
+
+      // indentify which index of location is being clicked
+
+      var index;
+      for(var i=0;i<locations.length;i++){
+        if(locations[i].name===location.name){
+          index=i;
+        }
+      }
+      toggleBounce(marker[index]);
+      infowindow[index].open(map, marker[index]);
+
+    };
+
+    //now let's handel the search filter function
+    self.query = ko.observable('');
+    self.search = function(value) {
+      // remove all the current locations, which removes them from the view
+      AppViewModel.allLocations.removeAll();
+
+      for(var x in locations) {
+        if(locations[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+          AppViewModel.allLocations.push(locations[x]);
+        }
+      }
+    };
+
 }
 
 // Activates knockout.js
 ko.applyBindings(new AppViewModel());
+AppViewModel.query.subscribe(AppViewModel.search);
