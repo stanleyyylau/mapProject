@@ -138,18 +138,11 @@ var AppViewModel = {
     query : ko.observable(''),
     search : function(value) {
       // remove all the current locations, which removes them from the view
-      AppViewModel.allLocations.removeAll();
+      AppViewModel.allLocations([]);
       console.log(value);
-      // for(var x in locations) {
-      //   if(locations[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-      //     AppViewModel.allLocations.push(locations[x]);
-      //   }
-      // }
-      console.log(locations);
-      AppViewModel.allLocations.push(locations[3]);
-      for(var i=0; i>locations.length; i++){
-        if(locations[i].name.toLowerCase().indexOf(value.toLowerCase()) >= 0){
-          AppViewModel.allLocations.push(locations[i]);
+      for(var x in locations) {
+        if(locations[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+          AppViewModel.allLocations.push(locations[x]);
         }
       }
 
