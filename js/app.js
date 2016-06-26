@@ -55,6 +55,7 @@ function initMap() {
         zoom: 8
     });
 
+    //let's loop through the array to add location and marks and info and event listener
     for (var i = 0; i < AppViewModel.allLocations().length; i++) {
         marker[i] = new google.maps.Marker({
             map: map,
@@ -69,17 +70,13 @@ function initMap() {
           content:AppViewModel.allLocations()[i].content
         });
 
+        // this is trick learned from design pattern for looping adding event listener
         marker[i].addListener('click', (function(infoCopy,markerCopy) {
           return function(){
               infoCopy.open(map, markerCopy);
+              toggleBounce(this);
           }
-
-        })(infowindow[i],marker[i]));
-
-        google.maps.event.addListener(marker[i], 'click', function() {
-            toggleBounce(this);
-        });
-
+          })(infowindow[i],marker[i]));
     }
 
 
@@ -130,7 +127,7 @@ var AppViewModel = {
 
     },
 
-    //now let's handel the search filter function
+    //now let's handle the search filter function
     query : ko.observable(''),
     search : function(value) {
       // remove all the current locations, which removes them from the view
@@ -160,41 +157,7 @@ ko.applyBindings(AppViewModel);
 AppViewModel.query.subscribe(AppViewModel.search);
 
 
-// function updateMap(){
-//   //let's clear all markers first
-//   console.log(marker);
-//   for(var ii=0; i<marker.length;i++){
-//     marker[ii].setMap(null);
-//   }
-//   console.log(ii);
-//
-//   for (var i = 0; i < AppViewModel.allLocations().length; i++) {
-//       marker[i] = new google.maps.Marker({
-//           map: map,
-//           animation: google.maps.Animation.DROP,
-//           position: {
-//               lat: locations[i].lon,
-//               lng: locations[i].lat
-//           }
-//       });
-//       //let me creat all the info window
-//         infowindow[i] = new google.maps.InfoWindow({
-//         content:AppViewModel.allLocations()[i].content
-//       });
-//
-//       marker[i].addListener('click', (function(infoCopy,markerCopy) {
-//         return function(){
-//             infoCopy.open(map, markerCopy);
-//         }
-//
-//       })(infowindow[i],marker[i]));
-//
-//       google.maps.event.addListener(marker[i], 'click', function() {
-//           toggleBounce(this);
-//       });
-//
-//   }
-// }
+
 
 
 //error handling for google maps
