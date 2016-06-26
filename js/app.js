@@ -71,6 +71,7 @@ function initMap() {
         });
 
         // this is trick learned from design pattern for looping adding event listener
+        // what happens when marker is clicked
         marker[i].addListener('click', (function(infoCopy,markerCopy) {
           return function(){
               infoCopy.open(map, markerCopy);
@@ -110,21 +111,20 @@ var AppViewModel = {
 
     locationClicked : function(location){
       console.log(location);
-      // when clicked, set the center of the map to current clicked location
       // actually we don't need to set map center to move the map, google map is smart enough to handle that moving part
-      // map.setCenter(new google.maps.LatLng(location.lon, location.lat));
-
       // indentify which index of location is being clicked
-
       var index;
       for(var i=0;i<locations.length;i++){
         if(locations[i].name===location.name){
           index=i;
         }
-      }
-      toggleBounce(marker[index]);
-      infowindow[index].open(map, marker[index]);
+      };
+      AppViewModel.showInfo(index);
+    },
 
+    showInfo : function(item){
+      toggleBounce(marker[item]);
+      infowindow[item].open(map, marker[item]);
     },
 
     //now let's handle the search filter function
