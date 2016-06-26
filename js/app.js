@@ -195,3 +195,14 @@ AppViewModel.query.subscribe(AppViewModel.search);
 //
 //   }
 // }
+
+
+//error handling for google maps
+function googleError(){
+  if(typeof $ == "object"){
+    $("#map").html("Fail to load Google maps");
+  }else{
+    document.getElementById("map").innerHTML='<div class="fail-google">Fail to load Google maps...</div>';
+  }
+
+}
