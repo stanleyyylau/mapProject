@@ -1,4 +1,5 @@
 // The this all my favarite moving locations app will load these location by default
+// in other words, the model
 var locations = [{
     name: "Guangzhou",
     lon: 23.1253503,
@@ -27,7 +28,11 @@ var locations = [{
 var map;
 var marker = [];
 var infowindow;
-// The function for initilization the google map
+
+
+
+// The function for initilization the google map and other function,
+// you call surely call this the view, because it initilize everything you set, kind of...
 function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
             center: {
@@ -57,8 +62,17 @@ function initMap() {
             });
         }
     }
-    // A fucntion to handle marker boucing when clicked
 
+//error handling for google maps
+function googleError() {
+    if (typeof $ == "object") {
+        $("#map").html("Fail to load Google maps");
+    }else{
+        document.getElementById("map").innerHTML = '<div class="fail-google">Fail to load Google maps...</div>';
+    }
+}
+
+// A fucntion to handle marker boucing when clicked
 function toggleBounce(marker) {
         if (marker.getAnimation() !== null) {
             marker.setAnimation(null);
@@ -68,8 +82,12 @@ function toggleBounce(marker) {
                 marker.setAnimation(null);
             }, 2000);
         }
-    }
-    //this is the KO part for MVVM pattern
+}
+
+
+
+//this is the KO part for MVVM pattern
+//in other words, the ViewModel
 var AppViewModel = {
     allLocations: ko.observableArray(locations),
     //when locations in the list view is clicked
@@ -142,14 +160,7 @@ var AppViewModel = {
         }
     }
 };
+
 // Activates knockout.js
 ko.applyBindings(AppViewModel);
 AppViewModel.query.subscribe(AppViewModel.search);
-//error handling for google maps
-function googleError() {
-    if (typeof $ == "object") {
-        $("#map").html("Fail to load Google maps");
-    } else {
-        document.getElementById("map").innerHTML = '<div class="fail-google">Fail to load Google maps...</div>';
-    }
-}
