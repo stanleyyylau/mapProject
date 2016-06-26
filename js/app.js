@@ -34,54 +34,55 @@ var infowindow;
 // The function for initilization the google map and other function,
 // you call surely call this the view, because it initilize everything you set, kind of...
 function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: {
-                lat: locations[0].lon,
-                lng: locations[0].lat
-            },
-            zoom: 8
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: {
+            lat: locations[0].lon,
+            lng: locations[0].lat
+        },
+        zoom: 8
+    });
+    infowindow = new google.maps.InfoWindow({
+        content: '<div class="info">loading...</div>'
+    });
+
+    // I'm making this function for marker click because JShint.com don't recommend making a function
+    // inside a for loop
+    markerClick = function() {
+        AppViewModel.showInfo(this);
+    };
+    //let's loop through the array to add location and marks and info and event listener
+    for (var i = 0; i < AppViewModel.allLocations().length; i++) {
+        marker[i] = new google.maps.Marker({
+            map: map,
+            animation: google.maps.Animation.DROP,
+            position: {
+                lat: locations[i].lon,
+                lng: locations[i].lat
+            }
         });
-        infowindow = new google.maps.InfoWindow({
-            content: '<div class="info">loading...</div>'
-        });
-        //let's loop through the array to add location and marks and info and event listener
-        for (var i = 0; i < AppViewModel.allLocations().length; i++) {
-            marker[i] = new google.maps.Marker({
-                map: map,
-                animation: google.maps.Animation.DROP,
-                position: {
-                    lat: locations[i].lon,
-                    lng: locations[i].lat
-                }
-            });
-            google.maps.event.addListener(marker[i], 'click', function() {
-                // self.showInfo(placeItem);
-                console.log(this);
-                // infowindow.open(map, this);
-                AppViewModel.showInfo(this);
-            });
-        }
+        google.maps.event.addListener(marker[i], 'click', markerClick);
     }
+}
 
 //error handling for google maps
 function googleError() {
     if (typeof $ == "object") {
         $("#map").html("Fail to load Google maps");
-    }else{
+    } else {
         document.getElementById("map").innerHTML = '<div class="fail-google">Fail to load Google maps...</div>';
     }
 }
 
 // A fucntion to handle marker boucing when clicked
 function toggleBounce(marker) {
-        if (marker.getAnimation() !== null) {
+    if (marker.getAnimation() !== null) {
+        marker.setAnimation(null);
+    } else {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        window.setTimeout(function() {
             marker.setAnimation(null);
-        } else {
-            marker.setAnimation(google.maps.Animation.BOUNCE);
-            window.setTimeout(function() {
-                marker.setAnimation(null);
-            }, 2000);
-        }
+        }, 2000);
+    }
 }
 
 
@@ -108,10 +109,10 @@ var AppViewModel = {
         // here comes the ajax part
         // we first get the name of the city that's being clicked, and send the request to wiki's api
         var requestCity;
-        for(var i=0;i<locations.length;i++){
-          if(marker.position.lat().toFixed(5)==locations[i].lon.toFixed(5) && marker.position.lng().toFixed(5)==locations[i].lat.toFixed(5)){
-            requestCity = locations[i].name;
-          }
+        for (var i = 0; i < locations.length; i++) {
+            if (marker.position.lat().toFixed(5) == locations[i].lon.toFixed(5) && marker.position.lng().toFixed(5) == locations[i].lat.toFixed(5)) {
+                requestCity = locations[i].name;
+            }
         }
         //console.log just to make sure we get the correct city name, and then concatenate to wiki api endpoint
         console.log(requestCity);
@@ -119,26 +120,26 @@ var AppViewModel = {
         // I use jQuery for ajax call, notice here I did not use success and error,
         //which are depreated and note considered best practices by latest jQuery version.
         $.ajax({
-          url: wikiUrl,
-          dataType: "jsonp"
+            url: wikiUrl,
+            dataType: "jsonp"
         }).done(function(data) {
-          var result = $(".info");
-          result.html("");
-          if(data[1].length==0){
-              result.html("No content related to this city");
-          }else{
-            var statusHTML='<ul>';
-            for(var i=0;i<3;i++){
-              // i'm only gonna append three wiki articles into the info window, no more, mo less
-              if(data[3][i]){
-                statusHTML += '<Li><a href="'+data[3][i]+'" target="_blank"><h1>'+data[1][i]+'</h1></a><p>'+data[2][i]+'</p></li>';
-              }
+            var result = $(".info");
+            result.html("");
+            if (data[1].length === 0) {
+                result.html("No content related to this city");
+            } else {
+                var statusHTML = '<ul>';
+                for (var i = 0; i < 3; i++) {
+                    // i'm only gonna append three wiki articles into the info window, no more, mo less
+                    if (data[3][i]) {
+                        statusHTML += '<Li><a href="' + data[3][i] + '" target="_blank"><h1>' + data[1][i] + '</h1></a><p>' + data[2][i] + '</p></li>';
+                    }
+                }
+                statusHTML += '</ul>';
+                result.html(statusHTML);
             }
-            statusHTML += '</ul>';
-            result.html(statusHTML);
-          }
-        }).fail(function(){
-          $(".info").html("Fail to load wiki content");
+        }).fail(function() {
+            $(".info").html("Fail to load wiki content");
         });
 
     },
